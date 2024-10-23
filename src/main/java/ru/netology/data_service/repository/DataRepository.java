@@ -12,10 +12,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DataRepository {
+    String selectProducts = read("products.sql");
     public static String getProductName(Data data){
-        //data.productName
-        //"data.sql"
-        //return read();
         return new String();
     }
 
