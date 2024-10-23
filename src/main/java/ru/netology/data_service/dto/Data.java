@@ -1,13 +1,8 @@
 package ru.netology.data_service.dto;
 
 public class Data {
-    private String name;
-    public Data(String name) {
-        this.name = name;
+    public String productName;
+    public Data(String productName) {
+        this.productName = productName;
     }
-
-    public String getName() {
-        return name;
-    }
-
 }

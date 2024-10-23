@@ -15,6 +15,6 @@ public class DataService {
     }
 
     public String getProductName(Data data){
-        return dataRepository.getProductName();
+        return dataRepository.getProductName(data);
     }
 }

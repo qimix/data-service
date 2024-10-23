@@ -1,0 +1,2 @@
+insert into customers (name, surname, age, phone_number) values ('User', 'User', 20, 89097777777);
+insert into orders (date, customer_id, product_name, amount) values (TO_DATE('18-10-2024', 'DD/MM/YYYY'), 1, 'kia', 620000);
