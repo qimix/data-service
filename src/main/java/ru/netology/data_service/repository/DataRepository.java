@@ -1,9 +1,11 @@
 package ru.netology.data_service.repository;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.netology.data_service.dto.Data;
 
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +14,17 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DataRepository {
-    String selectProducts = read("products.sql");
-    public static String getProductName(Data data){
+    private final String selectProducts = read("products.sql");
+    private final DataSource dataSource;
+    private final JdbcTemplate jdbcTemplate;
+
+    public DataRepository(DataSource dataSource, JdbcTemplate jdbcTemplate) {
+        this.dataSource = dataSource;
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public String getProductName(Data data){
+        jdbcTemplate.execute(selectProducts);
         return new String();
     }
 
