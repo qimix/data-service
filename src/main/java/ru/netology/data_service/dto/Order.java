@@ -9,6 +9,14 @@ public class Order {
     private String product_name;
     private Integer amount;
 
+    public Order(Long id, LocalDate date, Long customer_id, String product_name, Integer amount) {
+        this.id = id;
+        this.date = date;
+        this.customer_id = customer_id;
+        this.product_name = product_name;
+        this.amount = amount;
+    }
+
     public Long getId() {
         return id;
     }

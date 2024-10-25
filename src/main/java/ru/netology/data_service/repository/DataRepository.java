@@ -3,7 +3,6 @@ package ru.netology.data_service.repository;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.netology.data_service.dto.Data;
 import ru.netology.data_service.dto.Order;
@@ -13,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.ResultSet;
 import java.util.stream.Collectors;
 
 @Repository
@@ -32,13 +30,13 @@ public class DataRepository {
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
     public String getProductName(Data data){
-        Order order = jdbcTemplate.queryForObject("select * from orders where id = 1", (ResultSet, rowNum) -> {
-                    Order newOrder = new Order();
-                    newOrder.setId(ResultSet.getLong("id"));
-                    newOrder.setDate(ResultSet.getDate("date").toLocalDate());
-                    newOrder.setCustomer_id(ResultSet.getLong("customer_id"));
-                    newOrder.setAmount(ResultSet.getInt("amount"));
-                    return newOrder;
+        Order order = jdbcTemplate.queryForObject("select * from orders where id = 1", (rs, rowNum) -> {
+                    return new Order(
+                            rs.getLong("id"),
+                            rs.getDate("date").toLocalDate(),
+                            rs.getLong("customer_id"),
+                            rs.getString("product_name"),
+                            rs.getInt("amount"));
                 });
         return order.getProduct_name();
     }
