@@ -29,15 +29,12 @@ public class DataRepository {
     private final DataSource dataSource = dataSourceBuilder.build();
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-    public String getProductName(Data data){
-        Order order = jdbcTemplate.queryForObject("select * from orders where id = 1", (rs, rowNum) -> {
+    public String getProductName(String name){
+        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) like '" + name + "'";
+        Order order = jdbcTemplate.queryForObject(query, (rs, rowNum) -> {
                     return new Order(
-                            rs.getLong("id"),
-                            rs.getDate("date").toLocalDate(),
-                            rs.getLong("customer_id"),
-                            rs.getString("product_name"),
-                            rs.getInt("amount"));
-                });
+                            rs.getString("product_name"));
+        });
         return order.getProduct_name();
     }
 
