@@ -4,8 +4,8 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.netology.data_service.dto.Data;
 import ru.netology.data_service.dto.Order;
+import ru.netology.data_service.dto.Request;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -29,8 +29,8 @@ public class DataRepository {
     private final DataSource dataSource = dataSourceBuilder.build();
     private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-    public String getProductName(String name){
-        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) like '" + name + "'";
+    public String getProductName(Request request){
+        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) like '" + request.name + "'";
         Order order = jdbcTemplate.queryForObject(query, (rs, rowNum) -> {
                     return new Order(
                             rs.getString("product_name"));
