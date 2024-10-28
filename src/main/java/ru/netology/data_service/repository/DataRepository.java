@@ -6,7 +6,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
-import ru.netology.data_service.dto.Order;
 import ru.netology.data_service.dto.Request;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -36,9 +35,8 @@ public class DataRepository {
     }
 
     public String getProductName(Request request) {
-        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) = :name";
         SqlParameterSource namedParameters = new MapSqlParameterSource("name", request.name);
-        return namedParameterJdbcTemplate.queryForObject(query, namedParameters, String.class);
+        return namedParameterJdbcTemplate.queryForObject(selectProducts, namedParameters, String.class);
     }
 
     private static String read(String scriptFileName) {
@@ -49,4 +47,5 @@ public class DataRepository {
             throw new RuntimeException(e);
         }
     }
+
 }
