@@ -6,6 +6,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
@@ -29,9 +30,9 @@ public class DataConfig {
     }
 
     @Bean
-    @Qualifier("jdbcTemplate")
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+    @Qualifier("namedParameterJdbcTemplate")
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {
+        return new NamedParameterJdbcTemplate(dataSource());
     }
 
 }

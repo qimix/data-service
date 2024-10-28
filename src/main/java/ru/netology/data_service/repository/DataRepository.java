@@ -3,10 +3,12 @@ package ru.netology.data_service.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import ru.netology.data_service.dto.Order;
 import ru.netology.data_service.dto.Request;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class DataRepository {
     private String selectProducts = read("products.sql");
     private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     @Qualifier("dataSource")
@@ -28,18 +30,15 @@ public class DataRepository {
     }
 
     @Autowired
-    @Qualifier("jdbcTemplate")
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    @Qualifier("namedParameterJdbcTemplate")
+    public void setJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public String getProductName(Request request) {
-        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) like '" + request.name + "'";
-        Order order = jdbcTemplate.queryForObject(query, (rs, rowNum) -> {
-            return new Order(
-                    rs.getString("product_name"));
-        });
-        return order.getProduct_name();
+        String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) = :name";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("name", request.name);
+        return namedParameterJdbcTemplate.queryForObject(query, namedParameters, String.class);
     }
 
     private static String read(String scriptFileName) {
