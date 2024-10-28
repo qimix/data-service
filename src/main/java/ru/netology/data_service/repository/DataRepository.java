@@ -1,5 +1,7 @@
 package ru.netology.data_service.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,18 +18,20 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DataRepository {
-    private final String selectProducts = read("products.sql");
-    private final String username = "postgres";
-    private final String password = "password";
-    private final String url = "jdbc:postgresql://localhost:5432/netology";
-    private final String driverClassName = "org.postgresql.Driver";
-    private final DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create()
-    .username(username)
-    .password(password)
-    .url(url)
-    .driverClassName(driverClassName);
-    private final DataSource dataSource = dataSourceBuilder.build();
-    private final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    private String selectProducts = read("products.sql");
+    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier("dataSource")
+    public void setDataSource(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+    @Autowired
+    @Qualifier("jdbcTemplate")
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public String getProductName(Request request){
         String query = "SELECT DISTINCT product_name from orders JOIN customers ON orders.customer_id = customers.id where lower(customers.name) like '" + request.name + "'";
