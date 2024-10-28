@@ -10,11 +10,11 @@ public class DataService {
     @Autowired
     DataRepository dataRepository;
 
-    public DataService(DataRepository dataRepository){
+    public DataService(DataRepository dataRepository) {
         this.dataRepository = dataRepository;
     }
 
-    public String getProductName(Request request){
+    public String getProductName(Request request) {
         return dataRepository.getProductName(request);
     }
 }
