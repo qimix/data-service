@@ -1,0 +1,15 @@
+server:
+  port: 8080
+application:
+  name: "data-service"
+sql:
+  init:
+    mode: always
+jpa:
+  defer-datasource-initialization: true
+datasource:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/netology
+  username: postgres
+  password: password
+
